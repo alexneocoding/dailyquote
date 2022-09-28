@@ -5,6 +5,14 @@
 	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<flow name="scheduledFlow" doc:id="fcdd0224-4ce8-4a59-9773-8b6d0c457104" >
+		<scheduler doc:name="Scheduler" doc:id="4da9f11b-ed19-4280-b7f5-7df8e710c861" >
+			<scheduling-strategy >
+				<cron expression="${dailyquote.tweet.cron}" timeZone="${dailyquote.tweet.cron.timezone}" />
+			</scheduling-strategy>
+		</scheduler>
+		<flow-ref doc:name="Flow Reference" doc:id="4345de30-2d94-41ba-9ab3-5949ac48bd45" name="public_tweetDailyQuote"/>
+	</flow>
 	<flow name="public_QuoteOfTheDay" doc:id="b377dce0-d76e-47cb-b1ca-f77daa25e707">
 		<flow-ref doc:name="getQuoteFromAPI" doc:id="1025f377-eaf7-4cc5-86ab-6f053582c248" name="private_getQuoteFromAPI" />
 	</flow>
