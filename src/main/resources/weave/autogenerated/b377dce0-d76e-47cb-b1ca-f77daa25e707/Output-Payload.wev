@@ -1,0 +1,10 @@
+%dw 2.0
+
+type auto_b377dce0_d76e_47cb_b1ca_f77daa25e707_Output_Payload = {
+  quote: String, 
+  author: String, 
+  source: String, 
+  _?: Any
+} {"description": "Quote Data Type",
+"label": "Quote"}
+

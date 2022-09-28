@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<flow name="public_QuoteOfTheDay" doc:id="b377dce0-d76e-47cb-b1ca-f77daa25e707">
+		<flow-ref doc:name="getQuoteFromAPI" doc:id="1025f377-eaf7-4cc5-86ab-6f053582c248" name="private_getQuoteFromAPI" />
+	</flow>
+	<flow name="public_tweetDailyQuote" doc:id="8b4a35d5-c196-4245-87a2-d35449106240">
+		<flow-ref doc:name="getQuoteFromAPI" doc:id="73c9bfeb-9caf-4571-b537-8905d2df9a00" name="private_getQuoteFromAPI" />
+		<flow-ref doc:name="postTweet" doc:id="6d33f357-eb90-4c8d-94ce-ca91cf3d045d" name="private_postTweet" />
+	</flow>
+	<flow name="private_getQuoteFromAPI" doc:id="6ef701ec-2184-4982-9682-39e8819f633d">
+		<http:request method="GET" doc:name="Request total number of quotes" doc:id="40ed64cc-8c9a-4984-9e27-aa27d7be38f9" config-ref="LOTR_API_HTTP_Request_configuration_2" path="/quote">
+			<http:headers><![CDATA[#[output application/java
+---
+{
+	Authorization : p('lotr.authorization'),
+	Accept : "application/json"
+}]]]></http:headers>
+			<http:query-params><![CDATA[#[output application/java
+---
+{
+	limit : 0
+}]]]></http:query-params>
+		</http:request>
+		<ee:transform doc:name="Choose a random quote id" doc:id="07d166d6-ee13-41d0-bb7e-9a57d06ac26b">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+import java!company::RandomNumberGenerator
+output application/java
+
+var numberOfQuotes = ""
+
+---
+{
+	numberOfQuotes : RandomNumberGenerator::getRandomNumber(payload.total as String)
+}
+
+]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<http:request method="GET" doc:name="Get a raw Quote" doc:id="236ad23e-eb9e-4b25-9a30-0b013e140639" config-ref="LOTR_API_HTTP_Request_configuration_2" path="/quote">
+			<http:headers><![CDATA[#[output application/java
+---
+{
+	Authorization : p('lotr.authorization'),
+	Accept : "application/json"
+}]]]></http:headers>
+			<http:query-params><![CDATA[#[output application/java
+---
+{
+	offset : payload.numberOfQuotes,
+	limit : 1
+}]]]></http:query-params>
+		</http:request>
+		<scatter-gather doc:name="Scatter-Gather" doc:id="1737f7aa-d6de-4ebe-9ab9-2955369bec94">
+			<route>
+				<set-variable value="#[payload.docs[0].dialog]" doc:name="Get quote phrase" doc:id="a0f8fd9f-d62f-4a87-b290-56560663c42e" variableName="Dialog" />
+			</route>
+			<route>
+				<http:request method="GET" doc:name="Get Char name" doc:id="3a4f70be-e4be-4979-9969-8a93789d6183" config-ref="LOTR_API_HTTP_Request_configuration_2" path="/character/{charactereId}" sendBodyMode="ALWAYS">
+					<http:headers><![CDATA[#[output application/java
+---
+{
+	Authorization : p('lotr.authorization'),
+	Accept : "application/json"
+}]]]></http:headers>
+					<http:uri-params><![CDATA[#[output application/java
+---
+{
+	charactereId : payload.docs[0].character
+}]]]></http:uri-params>
+				</http:request>
+				<set-variable value="#[payload.docs[0].name]" doc:name="charName" doc:id="2e9a6a90-8e0e-4a64-a8a1-030b82aeb34c" variableName="charName" />
+			</route>
+			<route>
+				<http:request method="GET" doc:name="Get Movie name" doc:id="a1cec17b-6e72-463a-b9c8-96851cbe2e5f" config-ref="LOTR_API_HTTP_Request_configuration_2" path="/movie/{movieId}" sendBodyMode="ALWAYS">
+					<http:headers><![CDATA[#[output application/java
+---
+{
+	Authorization : p('lotr.authorization'),
+	Accept : "application/json"
+}]]]></http:headers>
+					<http:uri-params><![CDATA[#[output application/java
+---
+{
+	movieId : payload.docs[0].movie
+}]]]></http:uri-params>
+				</http:request>
+				<set-variable value="#[payload.docs[0].name]" doc:name="movieName" doc:id="4d5cbf71-68d0-47fc-9f50-bae95ba9400b" variableName="movieName" />
+			</route>
+		</scatter-gather>
+		<set-variable value="#['&quot;' ++ trim(vars.Dialog) ++ '&quot; - ' ++ upper(vars.charName) ++ ' [' ++ vars.movieName ++ ']']" doc:name="preparedQuote" doc:id="4d553822-0d13-4f1a-b9cc-e4f7fdcd9eae" variableName="preparedQuote" />
+		<ee:transform doc:name="Transform Message" doc:id="a7a8cbd6-f72c-4a9f-a60f-a4c380666aab">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+	
+	"quote" : "'" ++ vars.Dialog  ++ "'",
+	"author" : "'" ++ vars.charName  ++ "'",
+	"source" : "'" ++ vars.movieName  ++ "'",
+
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+	<flow name="private_postTweet" doc:id="8fd715df-b6e1-414c-9204-2fcf8ed17ee7">
+		<ee:transform doc:name="Tweet quote" doc:id="d758c760-7166-4b0f-bc50-727e20e4d413">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+import java!company::TwitterHelper
+output application/java
+---
+{	
+	quote: vars.preparedQuote,
+	result: TwitterHelper::postTweet(
+		vars.preparedQuote as String
+		, p('twitter.oauth.consumer_key')
+		, p('twitter.oauth.consumer_secret')
+		, p('twitter.oauth.access_token')
+		, p('twitter.oauth.token_secret'))
+}
+		]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<set-payload value='#[payload.quote]' doc:name="Set Payload" doc:id="45cb617b-40c2-4569-a3a1-126c06f21153" />
+	</flow>
+</mule>

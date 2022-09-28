@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd">
+	<http:request-config
+		name="LOTR_API_HTTP_Request_configuration_2"
+		doc:name="HTTP Request configuration"
+		doc:id="5d74600f-504c-4c2f-8c5b-a628088e42de" basePath="/v2">
+		<http:request-connection protocol="HTTPS"
+			host="${lotr.host}" port="443" />
+
+	</http:request-config>
+	<configuration-properties
+		doc:name="Configuration properties"
+		doc:id="2c7933ac-6951-4f2f-8e11-99c655fe6d2c" file="${env}.properties" />
+	<global-property doc:name="Global Property" doc:id="4cff0ea1-8758-4e1c-a835-d0f71f451947" name="env" value="local" />
+</mule>
