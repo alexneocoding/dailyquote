@@ -2,7 +2,7 @@
 # Daily Quote! 
 
 ## What it does?
-It is a Mulesoft ESB app that tweets a daily quote from the movies Lord Of the Rings (LOTR).
+It is a Mulesoft ESB app that tweets a daily quote, in the language you want, from the movies Lord Of the Rings (LOTR).
 
 
 ## What is the data source?
@@ -28,7 +28,7 @@ This app integrates a LOTR content API and the Twitter v2 API, so you will need 
 dailyquote.http.port: 8081
 dailyquote.tweet.cron: 0 0 0,7,9,11,13,15,17,19,21,23 ? * * *
 dailyquote.tweet.cron.timezone: 201
-dailyquote.translation.enable: true
+dailyquote.translation.enable: true 
 
 google.translatelanguage.host:translation.googleapis.com
 google.translatelanguage.url: /language/translate/v2
@@ -70,10 +70,10 @@ The offline version of this tool is needed to performs tests against localhost.
 ```
    
 ## Whishlist for future/possible updates
-   - Tweet quotes in several languages through Google Translator API or similar.
-   - Tweet a picture of the movie caracter owner of the quote along with it its quote.
-   - Write proper error handlings including sending e-mails to system admin when an exception happens.
-   - Integrate with Github actions to automatically build and deploy in CloudHub.
+   - [x] Tweet quotes in several languages through Google Translator API or similar.
+   - [ ] Tweet a picture of the movie caracter owner of the quote along with it its quote.
+   - [ ] Write proper error handlings including sending e-mails to system admin when an exception happens.
+   - [ ] Integrate with Github actions to automatically build and deploy in CloudHub.
 
 
 ###### I'm using Mule 4 in this app
