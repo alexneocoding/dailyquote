@@ -11,18 +11,21 @@ I'm using the nice API created by Ulrike Exner (http://rike.dev) that returns LO
 
 ## How to run it?
 
-This app integrates a LOTR content API and the Twitter v2 API, so you will need the following resources to run it.
+This app integrates a LOTR content API and the Twitter v2 API, so you will need the following resources to run it. Everything here is free.
 
-1. A twitter account
+1. A twitter account.
    - How-to: https://help.twitter.com/en/resources/twitter-guide/twitter-101/how-to-set-up-your-twitter-account-twitter-help
 
-2. A twitter developer account using Twitter API v2 updated to Elevated (everything is free)
+2. A twitter developer account using Twitter API v2 updated to Elevated.
    - How-to: https://www.extly.com/docs/perfect_publisher/user_guide/tutorials/how-to-auto-post-from-joomla-to-twitter/apply-for-a-twitter-developer-account/#apply-for-a-developer-account
 
-3. A Lord of the Rings (LOTR) API developer account
+3. A Lord of the Rings (LOTR) API developer account.
    - How-to: https://the-one-api.dev/sign-up
    
-4. Create a new file src/main/resources/local.properties with authorization info from twitter and LOTR APIs.
+4. A Google Cloud Account and a key to use the service Google Translate.
+   - How-to: https://cloud.google.com/translate/
+   
+5. Create a new file src/main/resources/local.properties with authorization info from twitter and LOTR APIs.
 
 ```
 dailyquote.http.port: 8081
