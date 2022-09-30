@@ -2,7 +2,10 @@
 # Daily Quote! 
 
 ## What it does?
-It is a Mulesoft ESB app that tweets a daily quote, in the language you want, from the movies Lord Of the Rings (LOTR).
+It is a Mulesoft ESB tweeter bot that posts a daily quote from the movies Lord Of the Rings (LOTR) using the language you want. 
+
+![Real twitter account running the bot](dailtquote_sample.jpg)
+
 
 
 ## What is the data source?
