@@ -28,6 +28,12 @@ This app integrates a LOTR content API and the Twitter v2 API, so you will need 
 dailyquote.http.port: 8081
 dailyquote.tweet.cron: 0 0 0,7,9,11,13,15,17,19,21,23 ? * * *
 dailyquote.tweet.cron.timezone: 201
+dailyquote.translation.enable: true
+
+google.translatelanguage.host:translation.googleapis.com
+google.translatelanguage.url: /language/translate/v2
+google.translate.APIKEY: [your key]
+google.translatelanguage.targetlanguage: pt
     
 twitter.host: api.twitter.com
 twitter.oauth.consumer_key: [value]
@@ -36,9 +42,8 @@ twitter.oauth.access_token: [value]
 twitter.oauth.token_secret: [value]
 
 lotr.host: the-one-api.dev
-lotr.authorization: [value]
-  
- ```
+lotr.authorization: [value]  
+```
   
 ## Testing
 
