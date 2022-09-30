@@ -7,13 +7,18 @@
 	xsi:schemaLocation="
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd">
 	<http:request-config
-		name="LOTR_API_HTTP_Request_configuration_2"
+		name="LOTR_API_HTTP_Request_configuration"
 		doc:name="HTTP Request configuration"
 		doc:id="5d74600f-504c-4c2f-8c5b-a628088e42de" basePath="/v2">
 		<http:request-connection protocol="HTTPS"
 			host="${lotr.host}" port="443" />
 
 	</http:request-config>
+	
+	<http:request-config name="HTTPS_Google_Translate_Request_configuration" doc:name="HTTP Request configuration" doc:id="4c4d95b6-952a-4948-9347-1e7fb0ebc636" >
+		<http:request-connection host="${google.translatelanguage.host}" protocol="HTTPS"/>
+	</http:request-config>
+	
 	<configuration-properties
 		doc:name="Configuration properties"
 		doc:id="2c7933ac-6951-4f2f-8e11-99c655fe6d2c" file="${env}.properties" />
